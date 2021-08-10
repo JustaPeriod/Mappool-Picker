@@ -167,8 +167,10 @@ html {
     margin-bottom: auto;
     top: 0;
     bottom: 0;
-    background-size: 100%;
-    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.20);
+    background-size: auto auto;
+    background-repeat: no-repeat; 
+    background-position: center;
+    /*box-shadow: 0 5px 5px rgba(0, 0, 0, 0.20);*/
 }
 
 #avatarLeft {
