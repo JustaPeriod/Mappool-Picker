@@ -149,6 +149,13 @@ let starsVisibleTemp;
 
 let team1 = "Red",
     team2 = "Blue";
+    
+let team1Ava;
+let team2Ava;
+let team1Minor;
+let team2Minor;
+let team1Major = 0;
+let team2Major = 0;
 
 socket.onmessage = async(event) => {
     let data = JSON.parse(event.data);
@@ -162,14 +169,40 @@ socket.onmessage = async(event) => {
     }
 
     if (!avaSet) {
+        team1Ava = team1;
+        team1Minor = team1Ava.substring(0, team1Ava.length - 2);
+        console.log(team1Minor);
+        
+        team2Ava = team2;
+        team2Minor = team2Ava.substring(0, team2Ava.length - 2);
+        console.log(team2Minor);
+        
+        let avaPathTeam1 = "./static/country/"+team1Ava.toLowerCase()+".png";
+        let avaPathTeam1Minor = "./static/country/"+team1Minor.toLowerCase()+".png";
+        let avaPathTeam2 = "./static/country/"+team2Ava.toLowerCase()+".png";
+        let avaPathTeam2Minor = "./static/country/"+team2Minor.toLowerCase()+".png";
+        
         avaSet = 1;
-        if (setAvatar(avaLeft, team1)) {
-            avaLeft.style.backgroundImage = "url('./static/left.png')";
+       
+        if  (fileExists(avaPathTeam1)) {
+                team1Major = 1;
+            }
+        if  (fileExists(avaPathTeam2)) {
+                team2Major = 1;
+            }
+        
+        if (team1Major == 1) {
+           avaLeft.style.backgroundImage = "url('"+avaPathTeam1+"')";           
+        } else {
+           avaLeft.style.backgroundImage = "url('"+avaPathTeam1Minor+"')";
         }
-        if (setAvatar(avaRight, team2)) {
-            avaRight.style.backgroundImage = "url('./static/right.png')";
+        if (team2Major == 1) {
+           avaRight.style.backgroundImage = "url('"+avaPathTeam2+"')"; 
+        } else {
+           avaRight.style.backgroundImage = "url('"+avaPathTeam2Minor+"')";
         }
     }
+
 
     if (!hasSetup) setupBeatmaps();
 
@@ -473,7 +506,7 @@ async function setupBeatmaps() {
         bm.bg.innerHTML = "CS: " + mapData.diff_size + '&emsp;AR: ' + mapData.diff_approach + '&emsp;OD: ' + mapData.diff_overall + '&emsp;HP: ' + mapData.diff_drain + '&emsp;SR: ' + parseFloat(mapData.difficultyrating).toFixed(2) + '*';
         beatmaps.add(bm);
     });
-}
+};
 
 async function getDataSet(beatmapID) {
     try {
@@ -500,7 +533,7 @@ async function setAvatar(element, username) {
     } else {
         return false;
     }
-}
+};
 
 async function getUserDataSet(name) {
     try {
@@ -517,4 +550,12 @@ async function getUserDataSet(name) {
     } catch (error) {
         console.error(error);
     }
+};
+
+function fileExists(url)
+{
+    var http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+    return http.status!=404;
 };
